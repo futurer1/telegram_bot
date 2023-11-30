@@ -7,11 +7,10 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource("classpath:application.properties")
-@PropertySource("classpath:bot.properties")
 @Log4j
-public class DispatcherApplication {
+public class NodeApplication {
     public static void main(String[] args) {
-        SpringApplication.run(DispatcherApplication.class, args);
-        log.debug("Dispatcher is start");
+        SpringApplication.run(NodeApplication.class, args);
+        log.debug("Node is start");
     }
 }

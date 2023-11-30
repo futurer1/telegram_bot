@@ -21,6 +21,10 @@ public class UpdateProducerImpl implements UpdateProducer {
         log.debug(update.getMessage().getText());
 
         // преобразование в JSON объекта Update и отправка в указанную очередь rabbitQueue
+
+        // Отправляет полученное от API Telegram сообщение в брокера
+        // Сообщения пользователей накапливаются в различных очередях в зависимости от
+        // типа сообщения
         rabbitTemplate.convertAndSend(rabbitQueue, update);
     }
 }

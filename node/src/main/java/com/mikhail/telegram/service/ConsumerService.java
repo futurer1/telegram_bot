@@ -1,0 +1,9 @@
+package com.mikhail.telegram.service;
+
+import org.telegram.telegrambots.meta.api.objects.Update;
+
+public interface ConsumerService {
+    void consumeTextMessageUpdates(Update update);
+    void consumeDocsMessageUpdates(Update update);
+    void consumePhotoMessageUpdates(Update update);
+}
