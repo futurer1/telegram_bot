@@ -8,8 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.mikhail.telegram.model.RabbitQueue.PHOTO_MESSAGE_UPDATE;
-import static com.mikhail.telegram.model.RabbitQueue.TEXT_MESSAGE_UPDATE;
+import static com.mikhail.telegram.model.RabbitQueue.*;
 
 @Component
 @Log4j
@@ -38,7 +37,7 @@ public class UpdateController {
         if (update.getMessage() != null) {
             distributeMessagesByType(update);
         } else {
-            log.error("Received unsupported message type " + update);
+            log.error("Unsupported message type is received " + update);
         }
     }
 
@@ -50,9 +49,17 @@ public class UpdateController {
             processTextMessage(update);
         } else if (message.getPhoto() != null) {
             processPhotoMessage(update);
+        } else if (message.getDocument() != null) {
+            processDocMessage(update);
         } else {
             setUnsupportedMessageTypeView(update);
         }
+    }
+
+    private void setFileIsReceivedView(Update update) {
+        var sendMessage = messageUtils.generateSendMessageWithText(update,
+                "Файл получен! Обрабатывается...");
+        setView(sendMessage);
     }
 
     private void processTextMessage(Update update) {
@@ -61,6 +68,12 @@ public class UpdateController {
 
     private void processPhotoMessage(Update update) {
         updateProducer.produce(PHOTO_MESSAGE_UPDATE, update);
+        setFileIsReceivedView(update);
+    }
+
+    private void processDocMessage(Update update) {
+        updateProducer.produce(DOC_MESSAGE_UPDATE, update);
+        setFileIsReceivedView(update);
     }
 
     private void setUnsupportedMessageTypeView(Update update) {

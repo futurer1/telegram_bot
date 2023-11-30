@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 
 logs/*
+.idea/*
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
