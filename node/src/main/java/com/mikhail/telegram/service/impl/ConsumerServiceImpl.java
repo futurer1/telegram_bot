@@ -1,11 +1,11 @@
 package com.mikhail.telegram.service.impl;
 
 import com.mikhail.telegram.service.ConsumerService;
+import com.mikhail.telegram.service.MainService;
 import com.mikhail.telegram.service.ProducerService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.mikhail.telegram.model.RabbitQueue.*;
@@ -14,9 +14,12 @@ import static com.mikhail.telegram.model.RabbitQueue.*;
 @Log4j
 public class ConsumerServiceImpl implements ConsumerService {
 
+    private final MainService mainService;
+
     private final ProducerService producerService;
 
-    public ConsumerServiceImpl(ProducerService producerService) {
+    public ConsumerServiceImpl(MainService mainService, ProducerService producerService) {
+        this.mainService = mainService;
         this.producerService = producerService;
     }
 
@@ -26,14 +29,10 @@ public class ConsumerServiceImpl implements ConsumerService {
         log.debug("NODE: Text message is received");
 
         // получает сообщения из соответствующей очереди
+        // сохраняет сообщение в виде JSON в БД
         // формирует ответ на сообщение и публикует его в очередь ANSWER_MESSAGE
         // ответы накапливаются в этой очереди и будут обработаны в микросервисе dispatcher
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(update.getMessage().getChatId());
-        sendMessage.setText("Hello from NODE");
-
-        producerService.produceAnswer(sendMessage);
+        mainService.processTextMessage(update);
     }
 
     @Override

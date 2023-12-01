@@ -34,7 +34,7 @@ public class UpdateController {
             return;
         }
 
-        if (update.getMessage() != null) {
+        if (update.hasMessage()) {
             distributeMessagesByType(update);
         } else {
             log.error("Unsupported message type is received " + update);
@@ -44,12 +44,12 @@ public class UpdateController {
     private void distributeMessagesByType(Update update) {
         Message message = update.getMessage();
         if (update.hasMessage()
-                && update.getMessage().hasText()
+                && message.hasText()
         ) {
             processTextMessage(update);
-        } else if (message.getPhoto() != null) {
+        } else if (message.hasPhoto()) {
             processPhotoMessage(update);
-        } else if (message.getDocument() != null) {
+        } else if (message.hasDocument()) {
             processDocMessage(update);
         } else {
             setUnsupportedMessageTypeView(update);
