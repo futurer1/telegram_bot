@@ -2,15 +2,18 @@ package com.mikhail.telegram.service.impl;
 
 import com.mikhail.telegram.dao.AppUserDAO;
 import com.mikhail.telegram.dao.RawDataDAO;
+import com.mikhail.telegram.entity.AppDocument;
 import com.mikhail.telegram.entity.AppUser;
 import com.mikhail.telegram.entity.RawData;
 import com.mikhail.telegram.entity.UserState;
+import com.mikhail.telegram.exceptions.UploadFileException;
 import com.mikhail.telegram.service.MainService;
 import com.mikhail.telegram.service.ProducerService;
+import com.mikhail.telegram.service.enums.ServiceCommands;
 import lombok.extern.log4j.Log4j;
+import com.mikhail.telegram.service.FileService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
@@ -28,14 +31,17 @@ public class MainServiceImpl implements MainService {
 
     private final ProducerService producerService;
 
+    private final FileService fileService;
+
     public MainServiceImpl(
             AppUserDAO appUserDAO,
             RawDataDAO rawDataDAO,
-            ProducerService producerService
-    ) {
+            ProducerService producerService,
+            FileService fileService) {
         this.appUserDAO = appUserDAO;
         this.rawDataDAO = rawDataDAO;
         this.producerService = producerService;
+        this.fileService = fileService;
     }
 
     @Override
@@ -48,7 +54,9 @@ public class MainServiceImpl implements MainService {
 
         String output = null;
 
-        if (CANCEL.equals(textCommand)) {
+        ServiceCommands serviceCommand = ServiceCommands.fromValue(textCommand);
+
+        if (CANCEL.equals(serviceCommand)) {
             output = cancelProcess(appUser);
         } else if (BASIC_STATE.equals(userState)) {
             output = processServiceCommand(appUser, textCommand);
@@ -75,7 +83,8 @@ public class MainServiceImpl implements MainService {
 
         //todo реализовать сохранение фото
 
-        String output = "Фотография загружена успешно. Ссылка для скачивания: test.ru/photo";
+        String link = "http://test.com/download-doc/123";
+        String output = "Фотография загружена успешно. Ссылка для скачивания: " + link;
         sendAnswer(output, chatId);
     }
 
@@ -89,10 +98,20 @@ public class MainServiceImpl implements MainService {
             return;
         }
 
-        //todo реализовать сохранение документа
+        try {
+            AppDocument doc = fileService.processDoc(update.getMessage());
 
-        String output = "Документ загружен успешно. Ссылка для скачивания: test.ru/doc";
-        sendAnswer(output, chatId);
+            //String link = fileService.generateLink(doc.getId(), LinkType.GET_DOC);
+            String link = "http://test.com/download-doc/123";
+
+            var output = "Документ загружен успешно. "
+                    + "Ссылка для скачивания: " + link;
+            sendAnswer(output, chatId);
+        } catch (UploadFileException e) {
+            log.error(e);
+            String error = "В ходе загрузки файла произошла ошибка. Повторите попытку позже.";
+            sendAnswer(error, chatId);
+        }
     }
 
     private boolean isAllowToSendContent(Long chatId, AppUser appUser) {
@@ -121,12 +140,14 @@ public class MainServiceImpl implements MainService {
     }
 
     private String processServiceCommand(AppUser appUser, String textCommand) {
-        if (REGISTRATION.equals(textCommand)) {
+        ServiceCommands serviceCommands = ServiceCommands.fromValue(textCommand);
+
+        if (REGISTRATION.equals(serviceCommands)) {
             //todo реализовать
             return "Временно недоступно";
-        } else if (HELP.equals(textCommand)) {
+        } else if (HELP.equals(serviceCommands)) {
             return help();
-        } else if (START.equals(textCommand)) {
+        } else if (START.equals(serviceCommands)) {
             return "Добро пожаловать! Чтобы узнать список доступных команд воспользуйтесь " + HELP;
         } else {
             return "Неизвестная команда! Чтобы узнать список доступных команд воспользуйтесь " + HELP;

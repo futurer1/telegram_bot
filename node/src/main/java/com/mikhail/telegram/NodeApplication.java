@@ -7,6 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource("classpath:application.properties")
+@PropertySource("classpath:bot.properties")
 @Log4j
 public class NodeApplication {
     public static void main(String[] args) {

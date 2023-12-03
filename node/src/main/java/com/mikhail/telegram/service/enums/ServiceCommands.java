@@ -17,7 +17,19 @@ public enum ServiceCommands {
         return value;
     }
 
-    public boolean equals(String cmd) {
-        return this.toString().equals(cmd);
+    /**
+     * Возвращает только валидные команды из перечня enum
+     *
+     * @param v строка от пользователя с командой
+     * @return
+     */
+    public static ServiceCommands fromValue(String v) {
+        for (ServiceCommands c: ServiceCommands.values()) {
+            if (c.value.equals(v)) {
+                return c;
+            }
+        }
+
+        return null;
     }
 }
