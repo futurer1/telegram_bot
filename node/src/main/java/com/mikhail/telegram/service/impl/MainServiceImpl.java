@@ -94,9 +94,9 @@ public class MainServiceImpl implements MainService {
             String link = "http://test.com/download-doc/123";
             String output = "Фотография загружена успешно. Ссылка для скачивания: " + link;
             sendAnswer(output, chatId);
-        } catch (UploadFileException ex) {
-            log.error(ex);
-            String error = "К сожалению, загрузка фото не удалась. Повторите попытку позже.";
+        } catch (UploadFileException e) {
+            log.error(e);
+            String error = "В ходе загрузки фото произошла ошибка. Повторите попытку позже.";
             sendAnswer(error, chatId);
         }
     }

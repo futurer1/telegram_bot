@@ -67,6 +67,8 @@ public class FileServiceImpl implements FileService {
     @Override
     public AppPhoto processPhoto(Message telegramMessage) {
         int photoSizeCount = telegramMessage.getPhoto().size();
+
+        //todo если к сообщению прикрепили несколько фото, то берем только одно первое
         int photoIndex = photoSizeCount > 1 ? telegramMessage.getPhoto().size() - 1 : 0;
         var telegramPhoto = telegramMessage.getPhoto().get(photoIndex);
         String fileId = telegramPhoto.getFileId();
@@ -82,6 +84,12 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    /**
+     * Получение объекта BinaryContent, который сохранен в БД, имеет id и связан с сессией JPA
+     *
+     * @param response
+     * @return
+     */
     private BinaryContent getPersistentBinaryContent(ResponseEntity<String> response) {
         String filePath = getFilePath(response);
         byte[] fileInByte = downloadFile(filePath);
@@ -141,6 +149,13 @@ public class FileServiceImpl implements FileService {
         );
     }
 
+
+    /**
+     * Получение пути к файлу для скачивания из telegram
+     *
+     * @param response
+     * @return
+     */
     private String getFilePath(ResponseEntity<String> response) {
         JSONObject jsonObject = new JSONObject(response.getBody());
         return String.valueOf(jsonObject
