@@ -1,8 +1,10 @@
 package com.mikhail.telegram.service.impl;
 
 import com.mikhail.telegram.dao.AppUserDAO;
+import com.mikhail.telegram.dao.AppPhotoDAO;
 import com.mikhail.telegram.dao.RawDataDAO;
 import com.mikhail.telegram.entity.AppDocument;
+import com.mikhail.telegram.entity.AppPhoto;
 import com.mikhail.telegram.entity.AppUser;
 import com.mikhail.telegram.entity.RawData;
 import com.mikhail.telegram.entity.UserState;
@@ -27,6 +29,8 @@ public class MainServiceImpl implements MainService {
 
     private final AppUserDAO appUserDAO;
 
+    private final AppPhotoDAO appPhotoDAO;
+
     private final RawDataDAO rawDataDAO;
 
     private final ProducerService producerService;
@@ -35,10 +39,11 @@ public class MainServiceImpl implements MainService {
 
     public MainServiceImpl(
             AppUserDAO appUserDAO,
-            RawDataDAO rawDataDAO,
+            AppPhotoDAO appPhotoDAO, RawDataDAO rawDataDAO,
             ProducerService producerService,
             FileService fileService) {
         this.appUserDAO = appUserDAO;
+        this.appPhotoDAO = appPhotoDAO;
         this.rawDataDAO = rawDataDAO;
         this.producerService = producerService;
         this.fileService = fileService;
@@ -81,11 +86,19 @@ public class MainServiceImpl implements MainService {
             return;
         }
 
-        //todo реализовать сохранение фото
+        try {
+            AppPhoto photo = fileService.processPhoto(update.getMessage());
 
-        String link = "http://test.com/download-doc/123";
-        String output = "Фотография загружена успешно. Ссылка для скачивания: " + link;
-        sendAnswer(output, chatId);
+            //String link = fileService.generateLink(photo.getId(), LinkType.GET_PHOTO);
+
+            String link = "http://test.com/download-doc/123";
+            String output = "Фотография загружена успешно. Ссылка для скачивания: " + link;
+            sendAnswer(output, chatId);
+        } catch (UploadFileException ex) {
+            log.error(ex);
+            String error = "К сожалению, загрузка фото не удалась. Повторите попытку позже.";
+            sendAnswer(error, chatId);
+        }
     }
 
     @Override
@@ -113,6 +126,8 @@ public class MainServiceImpl implements MainService {
             sendAnswer(error, chatId);
         }
     }
+
+
 
     private boolean isAllowToSendContent(Long chatId, AppUser appUser) {
 

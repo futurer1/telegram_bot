@@ -20,9 +20,9 @@ import jakarta.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "app_document")
+@Table(name = "app_photo")
 @Entity
-public class AppDocument {
+public class AppPhoto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,12 +30,8 @@ public class AppDocument {
 
     private String telegramFileId;
 
-    private String docName;
-
     @OneToOne
     private BinaryContent binaryContent;
 
-    private String mimeType;
-
-    private Long fileSize;
+    private Integer fileSize;
 }
