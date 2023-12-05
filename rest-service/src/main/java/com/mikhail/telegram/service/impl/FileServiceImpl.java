@@ -9,6 +9,7 @@ import com.mikhail.telegram.service.FileService;
 import com.mikhail.telegram.utils.CryptoTool;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +24,25 @@ public class FileServiceImpl implements FileService {
 
     private final AppDocumentDAO appDocumentDAO;
 
-    private final CryptoTool cryptoTool;
+    private final CryptoTool cryptoToolPhoto;
 
-    public FileServiceImpl(AppPhotoDAO appPhoto, AppDocumentDAO appDocumentDAO, CryptoTool cryptoTool) {
+    private final CryptoTool cryptoToolDoc;
+
+    public FileServiceImpl(AppPhotoDAO appPhoto,
+                           AppDocumentDAO appDocumentDAO,
+                           @Qualifier("CryptoToolPhoto") CryptoTool cryptoToolPhoto,
+                           @Qualifier("CryptoToolDoc") CryptoTool cryptoToolDoc
+    ) {
         this.appPhotoDAO = appPhoto;
         this.appDocumentDAO = appDocumentDAO;
-        this.cryptoTool = cryptoTool;
+        this.cryptoToolPhoto = cryptoToolPhoto;
+        this.cryptoToolDoc = cryptoToolDoc;
     }
 
     @Override
     public AppDocument getDocument(String docHash) {
 
-        Long id = cryptoTool.idOf(docHash);
+        Long id = cryptoToolDoc.idOf(docHash);
         if (id == null) {
             return null;
         }
@@ -44,7 +52,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public AppPhoto getPhoto(String photoHash) {
-        Long id = cryptoTool.idOf(photoHash);
+        Long id = cryptoToolPhoto.idOf(photoHash);
         if (id == null) {
             return null;
         }

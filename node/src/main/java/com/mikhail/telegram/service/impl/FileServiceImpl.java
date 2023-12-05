@@ -6,6 +6,7 @@ import com.mikhail.telegram.service.enums.LinkType;
 import com.mikhail.telegram.utils.CryptoTool;
 import lombok.extern.log4j.Log4j;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -47,13 +48,16 @@ public class FileServiceImpl implements FileService {
 
     private final AppPhotoDAO appPhotoDAO;
     private final BinaryContentDAO binaryContentDAO;
-    private final CryptoTool cryptoTool;
+    private final CryptoTool cryptoToolDoc;
 
-    public FileServiceImpl(AppDocumentDAO appDocumentDAO, AppPhotoDAO appPhotoDAO, BinaryContentDAO binaryContentDAO, CryptoTool cryptoTool) {
+    private final CryptoTool cryptoToolPhoto;
+
+    public FileServiceImpl(AppDocumentDAO appDocumentDAO, AppPhotoDAO appPhotoDAO, BinaryContentDAO binaryContentDAO, @Qualifier("CryptoToolDoc") CryptoTool cryptoToolDoc, @Qualifier("CryptoToolPhoto") CryptoTool cryptoToolPhoto) {
         this.appDocumentDAO = appDocumentDAO;
         this.appPhotoDAO = appPhotoDAO;
         this.binaryContentDAO = binaryContentDAO;
-        this.cryptoTool = cryptoTool;
+        this.cryptoToolDoc = cryptoToolDoc;
+        this.cryptoToolPhoto = cryptoToolPhoto;
     }
 
     @Override
@@ -202,7 +206,13 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String generateLink(Long id, LinkType linkType) {
-        String hash = cryptoTool.hashOf(id);
+        String hash = null;
+        if (linkType == LinkType.GET_DOC) {
+            hash = cryptoToolDoc.hashOf(id);
+        } else if (linkType == LinkType.GET_PHOTO) {
+            hash = cryptoToolPhoto.hashOf(id);
+        }
+
         return "http://" + linkAddress + "/" + linkType + "?id=" + hash;
     }
 }
