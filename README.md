@@ -3,6 +3,8 @@
 
 ```
 sudo nano ~/.bashrc
+```
+```
 source ~/.bashrc
 ```
 
