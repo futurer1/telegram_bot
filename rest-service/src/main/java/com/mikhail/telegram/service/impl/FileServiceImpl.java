@@ -6,6 +6,7 @@ import com.mikhail.telegram.entity.AppDocument;
 import com.mikhail.telegram.entity.AppPhoto;
 import com.mikhail.telegram.entity.BinaryContent;
 import com.mikhail.telegram.service.FileService;
+import com.mikhail.telegram.utils.CryptoTool;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.FileSystemResource;
@@ -22,22 +23,31 @@ public class FileServiceImpl implements FileService {
 
     private final AppDocumentDAO appDocumentDAO;
 
-    public FileServiceImpl(AppPhotoDAO appPhoto, AppDocumentDAO appDocumentDAO) {
+    private final CryptoTool cryptoTool;
+
+    public FileServiceImpl(AppPhotoDAO appPhoto, AppDocumentDAO appDocumentDAO, CryptoTool cryptoTool) {
         this.appPhotoDAO = appPhoto;
         this.appDocumentDAO = appDocumentDAO;
+        this.cryptoTool = cryptoTool;
     }
 
     @Override
-    public AppDocument getDocument(String docId) {
-        // хеш строка
-        var id = Long.parseLong(docId);
+    public AppDocument getDocument(String docHash) {
+
+        Long id = cryptoTool.idOf(docHash);
+        if (id == null) {
+            return null;
+        }
 
         return appDocumentDAO.findById(id).orElse(null);
     }
 
     @Override
-    public AppPhoto getPhoto(String photoId) {
-        var id = Long.parseLong(photoId);
+    public AppPhoto getPhoto(String photoHash) {
+        Long id = cryptoTool.idOf(photoHash);
+        if (id == null) {
+            return null;
+        }
 
         return appPhotoDAO.findById(id).orElse(null);
     }

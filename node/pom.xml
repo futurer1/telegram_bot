@@ -50,6 +50,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.mikhail.telegram</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
             <version>${telegram.version}</version>

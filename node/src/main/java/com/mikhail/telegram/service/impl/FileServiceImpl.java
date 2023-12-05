@@ -2,6 +2,8 @@ package com.mikhail.telegram.service.impl;
 
 import com.mikhail.telegram.dao.AppPhotoDAO;
 import com.mikhail.telegram.entity.AppPhoto;
+import com.mikhail.telegram.service.enums.LinkType;
+import com.mikhail.telegram.utils.CryptoTool;
 import lombok.extern.log4j.Log4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,19 +34,26 @@ import java.net.URL;
 public class FileServiceImpl implements FileService {
     @Value("${bot.token}")
     private String token;
+
     @Value("${service.file_info.uri}")
     private String fileInfoUri;
+
     @Value("${service.file_storage.uri}")
     private String fileStorageUri;
+
+    @Value("${link.address}")
+    private String linkAddress;
     private final AppDocumentDAO appDocumentDAO;
 
     private final AppPhotoDAO appPhotoDAO;
     private final BinaryContentDAO binaryContentDAO;
+    private final CryptoTool cryptoTool;
 
-    public FileServiceImpl(AppDocumentDAO appDocumentDAO, AppPhotoDAO appPhotoDAO, BinaryContentDAO binaryContentDAO) {
+    public FileServiceImpl(AppDocumentDAO appDocumentDAO, AppPhotoDAO appPhotoDAO, BinaryContentDAO binaryContentDAO, CryptoTool cryptoTool) {
         this.appDocumentDAO = appDocumentDAO;
         this.appPhotoDAO = appPhotoDAO;
         this.binaryContentDAO = binaryContentDAO;
+        this.cryptoTool = cryptoTool;
     }
 
     @Override
@@ -66,9 +75,12 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public AppPhoto processPhoto(Message telegramMessage) {
+
+        // кол-во фото в соообщении
         int photoSizeCount = telegramMessage.getPhoto().size();
 
-        //todo если к сообщению прикрепили несколько фото, то берем только одно первое
+        //todo если к сообщению прикрепили несколько фото, то берем только одно последнее
+        // последнее фото не сжатое и имеет самое большое разрешение
         int photoIndex = photoSizeCount > 1 ? telegramMessage.getPhoto().size() - 1 : 0;
         var telegramPhoto = telegramMessage.getPhoto().get(photoIndex);
         String fileId = telegramPhoto.getFileId();
@@ -186,5 +198,11 @@ public class FileServiceImpl implements FileService {
         } catch (IOException e) {
             throw new UploadFileException(urlObj.toExternalForm(), e);
         }
+    }
+
+    @Override
+    public String generateLink(Long id, LinkType linkType) {
+        String hash = cryptoTool.hashOf(id);
+        return "http://" + linkAddress + "/" + linkType + "?id=" + hash;
     }
 }

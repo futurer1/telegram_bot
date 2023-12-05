@@ -11,6 +11,7 @@ import com.mikhail.telegram.entity.UserState;
 import com.mikhail.telegram.exceptions.UploadFileException;
 import com.mikhail.telegram.service.MainService;
 import com.mikhail.telegram.service.ProducerService;
+import com.mikhail.telegram.service.enums.LinkType;
 import com.mikhail.telegram.service.enums.ServiceCommands;
 import lombok.extern.log4j.Log4j;
 import com.mikhail.telegram.service.FileService;
@@ -89,9 +90,8 @@ public class MainServiceImpl implements MainService {
         try {
             AppPhoto photo = fileService.processPhoto(update.getMessage());
 
-            //String link = fileService.generateLink(photo.getId(), LinkType.GET_PHOTO);
+            String link = fileService.generateLink(photo.getId(), LinkType.GET_PHOTO);
 
-            String link = "http://test.com/download-doc/123";
             String output = "Фотография загружена успешно. Ссылка для скачивания: " + link;
             sendAnswer(output, chatId);
         } catch (UploadFileException e) {
@@ -114,8 +114,7 @@ public class MainServiceImpl implements MainService {
         try {
             AppDocument doc = fileService.processDoc(update.getMessage());
 
-            //String link = fileService.generateLink(doc.getId(), LinkType.GET_DOC);
-            String link = "http://test.com/download-doc/123";
+            String link = fileService.generateLink(doc.getId(), LinkType.GET_DOC);
 
             var output = "Документ загружен успешно. "
                     + "Ссылка для скачивания: " + link;

@@ -19,6 +19,7 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <common-jpa.version>1.0-SNAPSHOT</common-jpa.version>
+        <common-utils.version>1.0-SNAPSHOT</common-utils.version>
         <common-io.version>2.4</common-io.version>
         <hibernate-types.version>2.2.2</hibernate-types.version>
         <postgresql.version>42.7.0</postgresql.version>
@@ -39,6 +40,12 @@
             <groupId>com.mikhail.telegram</groupId>
             <artifactId>common-jpa</artifactId>
             <version>${common-jpa.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mikhail.telegram</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>${common-utils.version}</version>
         </dependency>
 
         <dependency>
