@@ -15,6 +15,9 @@ public class RestServiceConfiguration {
     @Value("${salt.doc}")
     private String saltDoc;
 
+    @Value("${salt.userid}")
+    private String saltUserId;
+
     @Qualifier("CryptoToolPhoto")
     @Bean
     public CryptoTool getCryptoToolPhoto() {
@@ -25,5 +28,11 @@ public class RestServiceConfiguration {
     @Bean
     public CryptoTool getCryptoToolDoc() {
         return new CryptoTool(saltDoc);
+    }
+
+    @Qualifier("CryptoToolUserId")
+    @Bean
+    public CryptoTool getCryptoToolUserId() {
+        return new CryptoTool(saltUserId);
     }
 }

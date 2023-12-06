@@ -9,6 +9,7 @@ import com.mikhail.telegram.entity.AppUser;
 import com.mikhail.telegram.entity.RawData;
 import com.mikhail.telegram.entity.UserState;
 import com.mikhail.telegram.exceptions.UploadFileException;
+import com.mikhail.telegram.service.AppUserService;
 import com.mikhail.telegram.service.MainService;
 import com.mikhail.telegram.service.ProducerService;
 import com.mikhail.telegram.service.enums.LinkType;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+
+import java.util.Optional;
 
 import static com.mikhail.telegram.entity.UserState.BASIC_STATE;
 import static com.mikhail.telegram.entity.UserState.WAIT_FOR_EMAIL_STATE;
@@ -38,16 +41,21 @@ public class MainServiceImpl implements MainService {
 
     private final FileService fileService;
 
+    private final AppUserService appUserService;
+
     public MainServiceImpl(
             AppUserDAO appUserDAO,
-            AppPhotoDAO appPhotoDAO, RawDataDAO rawDataDAO,
+            AppPhotoDAO appPhotoDAO,
+            RawDataDAO rawDataDAO,
             ProducerService producerService,
-            FileService fileService) {
+            FileService fileService,
+            AppUserService appUserService) {
         this.appUserDAO = appUserDAO;
         this.appPhotoDAO = appPhotoDAO;
         this.rawDataDAO = rawDataDAO;
         this.producerService = producerService;
         this.fileService = fileService;
+        this.appUserService = appUserService;
     }
 
     @Override
@@ -67,8 +75,9 @@ public class MainServiceImpl implements MainService {
         } else if (BASIC_STATE.equals(userState)) {
             output = processServiceCommand(appUser, textCommand);
         } else if (WAIT_FOR_EMAIL_STATE.equals(userState)) {
-            //todo добавить проверку email, сохранение в БД или вывод сообщения об ошибке
+            output = appUserService.setEmail(appUser, textCommand);
         } else {
+
             log.error("Unknown user state: " + userState);
             output = "Неизвестная ошибка. Введите " + CANCEL + " и попробуйте повторить операцию.";
         }
@@ -126,8 +135,6 @@ public class MainServiceImpl implements MainService {
         }
     }
 
-
-
     private boolean isAllowToSendContent(Long chatId, AppUser appUser) {
 
         UserState userState = appUser.getState();
@@ -157,8 +164,7 @@ public class MainServiceImpl implements MainService {
         ServiceCommands serviceCommands = ServiceCommands.fromValue(textCommand);
 
         if (REGISTRATION.equals(serviceCommands)) {
-            //todo реализовать
-            return "Временно недоступно";
+            return appUserService.registryUser(appUser);
         } else if (HELP.equals(serviceCommands)) {
             return help();
         } else if (START.equals(serviceCommands)) {
@@ -184,23 +190,23 @@ public class MainServiceImpl implements MainService {
     private AppUser findOrSaveAppUser(Update update) {
         User telegramUser = update.getMessage().getFrom();
 
-        AppUser persistentAppUser = appUserDAO.findAppUserByTelegramUserId(telegramUser.getId());
-        if (persistentAppUser == null) {
+        Optional<AppUser> appUserOptional = appUserDAO.findUserByTelegramUserId(telegramUser.getId());
 
+        if (appUserOptional.isEmpty()) {
             AppUser transientAppUser = AppUser.builder()
                     .telegramUserId(telegramUser.getId())
                     .userName(telegramUser.getUserName())
                     .firstName(telegramUser.getFirstName())
                     .lastName(telegramUser.getLastName())
-                    //todo добавить поддержку активации через email
-                    .isActive(true)
+                    // пользователь активен только после подтверждения email
+                    .isActive(false)
                     .state(BASIC_STATE)
                     .build();
 
             return appUserDAO.save(transientAppUser);
         }
 
-        return persistentAppUser;
+        return appUserOptional.get();
     }
 
     private void saveRawData(Update update) {

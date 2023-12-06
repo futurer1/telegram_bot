@@ -52,7 +52,12 @@ public class FileServiceImpl implements FileService {
 
     private final CryptoTool cryptoToolPhoto;
 
-    public FileServiceImpl(AppDocumentDAO appDocumentDAO, AppPhotoDAO appPhotoDAO, BinaryContentDAO binaryContentDAO, @Qualifier("CryptoToolDoc") CryptoTool cryptoToolDoc, @Qualifier("CryptoToolPhoto") CryptoTool cryptoToolPhoto) {
+    public FileServiceImpl(AppDocumentDAO appDocumentDAO,
+                           AppPhotoDAO appPhotoDAO,
+                           BinaryContentDAO binaryContentDAO,
+                           @Qualifier("CryptoToolDoc") CryptoTool cryptoToolDoc,
+                           @Qualifier("CryptoToolPhoto") CryptoTool cryptoToolPhoto
+    ) {
         this.appDocumentDAO = appDocumentDAO;
         this.appPhotoDAO = appPhotoDAO;
         this.binaryContentDAO = binaryContentDAO;

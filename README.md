@@ -31,8 +31,17 @@ PG_PASSWORD
 ```
 
 // соль для генерации адреса скачивания документов и фото
+// соль для шифрования id пользователя
 
 ```
 TG_BOT_SALT_PHOTO
 TG_BOT_SALT_DOC
+TG_BOT_SALT_USERID
+```
+
+// имя сервера исходящей почты (например, smtp.mail.ru или smtp.yandex.ru), название ящика и пароль
+```
+TG_BOT_MAIL_HOST
+TG_BOT_MAIL_NAME
+TG_BOT_MAIL_PASSWORD
 ```
