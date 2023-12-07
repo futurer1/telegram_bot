@@ -5,6 +5,7 @@ target/
 
 logs/*
 .idea/*
+node/logs/*
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
