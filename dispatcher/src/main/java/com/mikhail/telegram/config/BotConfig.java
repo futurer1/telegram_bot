@@ -17,4 +17,10 @@ public class BotConfig {
 
     @Value("${bot.owner}")
     Long botOwner;
+
+    @Value("${bot.uri}")
+    String botUri;
+
+    @Value("${bot.muteanswer}")
+    Boolean botMuteAnswer;
 }

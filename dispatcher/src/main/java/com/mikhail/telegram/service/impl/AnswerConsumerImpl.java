@@ -1,6 +1,6 @@
 package com.mikhail.telegram.service.impl;
 
-import com.mikhail.telegram.controller.UpdateController;
+import com.mikhail.telegram.controller.UpdateProcessor;
 import com.mikhail.telegram.service.AnswerConsumer;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
@@ -11,10 +11,10 @@ import static com.mikhail.telegram.model.RabbitQueue.ANSWER_MESSAGE;
 @Service
 public class AnswerConsumerImpl implements AnswerConsumer {
 
-    private final UpdateController updateController;
+    private final UpdateProcessor updateProcessor;
 
-    public AnswerConsumerImpl(UpdateController updateController) {
-        this.updateController = updateController;
+    public AnswerConsumerImpl(UpdateProcessor updateProcessor) {
+        this.updateProcessor = updateProcessor;
     }
 
     @Override
@@ -24,6 +24,6 @@ public class AnswerConsumerImpl implements AnswerConsumer {
         // И пересылает их в API Telegram
         // Ответы находятся в отдельной очереди ANSWER_MESSAGE
 
-        updateController.setView(sendMessage);
+        updateProcessor.setView(sendMessage);
     }
 }
