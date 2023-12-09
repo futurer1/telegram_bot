@@ -2,6 +2,7 @@ package com.mikhail.telegram.controller;
 
 import com.mikhail.telegram.service.UpdateProducer;
 import com.mikhail.telegram.utils.MessageUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -10,19 +11,16 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.mikhail.telegram.model.RabbitQueue.*;
 
-@Component
 @Log4j
+@RequiredArgsConstructor
+@Component
 public class UpdateProcessor {
 
     private TelegramBot bot;
+
     private final MessageUtils messageUtils;
 
     private final UpdateProducer updateProducer;
-
-    public UpdateProcessor(MessageUtils messageUtils, UpdateProducer updateProducer) {
-        this.messageUtils = messageUtils;
-        this.updateProducer = updateProducer;
-    }
 
     public void registerBot(TelegramBot bot) {
         this.bot = bot;

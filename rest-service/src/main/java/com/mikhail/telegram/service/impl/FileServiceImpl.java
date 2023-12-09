@@ -4,17 +4,11 @@ import com.mikhail.telegram.dao.AppDocumentDAO;
 import com.mikhail.telegram.dao.AppPhotoDAO;
 import com.mikhail.telegram.entity.AppDocument;
 import com.mikhail.telegram.entity.AppPhoto;
-import com.mikhail.telegram.entity.BinaryContent;
 import com.mikhail.telegram.service.FileService;
 import com.mikhail.telegram.utils.CryptoTool;
 import lombok.extern.log4j.Log4j;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
 
 @Log4j
 @Service

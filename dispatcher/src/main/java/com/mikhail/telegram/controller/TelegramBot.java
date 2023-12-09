@@ -2,6 +2,7 @@ package com.mikhail.telegram.controller;
 
 import com.mikhail.telegram.config.BotConfig;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
@@ -11,14 +12,14 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-@Component
 @Log4j
+@Component
 public class TelegramBot extends TelegramWebhookBot {
     private final BotConfig config;
 
     private final static String UPDATE_PATH = "/update";
 
-    private UpdateProcessor updateProcessor;
+    private final UpdateProcessor updateProcessor;
 
     public TelegramBot(BotConfig config,
                        UpdateProcessor updateProcessor

@@ -24,7 +24,7 @@ public class MailSenderImpl implements MailSender {
 
     @Override
     public void send(MailParams mailParams) {
-        String subject = "Активация учетной записи для бота";
+        String subject = "Активация учетной записи Telegram-бота";
         String messageBody = getActivationMessageBody(mailParams.getId());
         String recipientMail = mailParams.getRecipientEmail();
 
@@ -38,7 +38,7 @@ public class MailSenderImpl implements MailSender {
     }
 
     private String getActivationMessageBody(String id) {
-        return String.format("Для регистрации в телеграмм боте подтвердите свой email перейдя по ссылке:\n%s",
+        return String.format("Для регистрации подтвердите свой email переходом по ссылке:\n%s",
                 activationServiceUri.replace("{id}", id)
         );
     }

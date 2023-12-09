@@ -27,13 +27,11 @@ import static com.mikhail.telegram.entity.UserState.BASIC_STATE;
 import static com.mikhail.telegram.entity.UserState.WAIT_FOR_EMAIL_STATE;
 import static com.mikhail.telegram.service.enums.ServiceCommands.*;
 
-@Service
 @Log4j
+@Service
 public class MainServiceImpl implements MainService {
 
     private final AppUserDAO appUserDAO;
-
-    private final AppPhotoDAO appPhotoDAO;
 
     private final RawDataDAO rawDataDAO;
 
@@ -45,13 +43,11 @@ public class MainServiceImpl implements MainService {
 
     public MainServiceImpl(
             AppUserDAO appUserDAO,
-            AppPhotoDAO appPhotoDAO,
             RawDataDAO rawDataDAO,
             ProducerService producerService,
             FileService fileService,
             AppUserService appUserService) {
         this.appUserDAO = appUserDAO;
-        this.appPhotoDAO = appPhotoDAO;
         this.rawDataDAO = rawDataDAO;
         this.producerService = producerService;
         this.fileService = fileService;

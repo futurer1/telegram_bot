@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "app_user")
 @Convert(attributeName = "jsonb", converter = JsonBinaryType.class)
+@Table(name = "app_user")
+@Entity
 public class AppUser {
 
     @Id

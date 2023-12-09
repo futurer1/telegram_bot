@@ -87,7 +87,7 @@ public class AppUserServiceImpl implements AppUserService {
             appUser.setState(BASIC_STATE);
             appUserDAO.save(appUser);
 
-            return "Данный email уже был использован для регистрации.";
+            return "Данный email уже был использован для регистрации!";
         }
     }
 

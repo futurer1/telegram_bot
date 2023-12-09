@@ -11,9 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.mikhail.telegram.model.RabbitQueue.*;
 
-@Service
-@RequiredArgsConstructor
 @Log4j
+@RequiredArgsConstructor
+@Service
 public class ConsumerServiceImpl implements ConsumerService {
 
     private final MainService mainService;
