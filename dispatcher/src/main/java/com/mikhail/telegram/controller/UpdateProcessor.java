@@ -1,5 +1,6 @@
 package com.mikhail.telegram.controller;
 
+import com.mikhail.telegram.config.RabbitConfiguration;
 import com.mikhail.telegram.service.UpdateProducer;
 import com.mikhail.telegram.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +9,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import static com.mikhail.telegram.model.RabbitQueue.*;
 
 @Log4j
 @RequiredArgsConstructor
@@ -21,6 +20,8 @@ public class UpdateProcessor {
     private final MessageUtils messageUtils;
 
     private final UpdateProducer updateProducer;
+
+    private final RabbitConfiguration rabbitConfiguration;
 
     public void registerBot(TelegramBot bot) {
         this.bot = bot;
@@ -61,16 +62,16 @@ public class UpdateProcessor {
     }
 
     private void processTextMessage(Update update) {
-        updateProducer.produce(TEXT_MESSAGE_UPDATE, update);
+        updateProducer.produce(rabbitConfiguration.getQueueTextMessageUpdate(), update);
     }
 
     private void processPhotoMessage(Update update) {
-        updateProducer.produce(PHOTO_MESSAGE_UPDATE, update);
+        updateProducer.produce(rabbitConfiguration.getQueuePhotoMessageUpdate(), update);
         setFileIsReceivedView(update);
     }
 
     private void processDocMessage(Update update) {
-        updateProducer.produce(DOC_MESSAGE_UPDATE, update);
+        updateProducer.produce(rabbitConfiguration.getQueueDocMessageUpdate(), update);
         setFileIsReceivedView(update);
     }
 

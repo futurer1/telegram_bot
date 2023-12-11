@@ -7,8 +7,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import static com.mikhail.telegram.model.RabbitQueue.ANSWER_MESSAGE;
-
 @RequiredArgsConstructor
 @Service
 public class AnswerConsumerImpl implements AnswerConsumer {
@@ -16,7 +14,7 @@ public class AnswerConsumerImpl implements AnswerConsumer {
     private final UpdateProcessor updateProcessor;
 
     @Override
-    @RabbitListener(queues = ANSWER_MESSAGE)
+    @RabbitListener(queues = "${spring.rabbitmq.queues.answer-message}")
     public void consume(SendMessage sendMessage) {
         // Считывает из брокера ответы, которые были отправлены из NODE
         // И пересылает их в API Telegram

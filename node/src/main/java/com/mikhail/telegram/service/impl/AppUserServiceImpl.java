@@ -6,6 +6,7 @@ import com.mikhail.telegram.entity.AppUser;
 import com.mikhail.telegram.service.AppUserService;
 import com.mikhail.telegram.utils.CryptoTool;
 import lombok.extern.log4j.Log4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -32,11 +33,17 @@ public class AppUserServiceImpl implements AppUserService {
     @Value("${service.mail.uri}")
     private String mailServiceUri;
 
+    @Value("${spring.rabbitmq.queues.mail-register}")
+    private String registrationMailQueue;
+
+    private final RabbitTemplate rabbitTemplate;
+
     public AppUserServiceImpl(AppUserDAO appUserDAO,
-                              @Qualifier("CryptoToolUserId") CryptoTool cryptoToolUserId
-    ) {
+                              @Qualifier("CryptoToolUserId") CryptoTool cryptoToolUserId,
+                              RabbitTemplate rabbitTemplate) {
         this.appUserDAO = appUserDAO;
         this.cryptoToolUserId = cryptoToolUserId;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -71,15 +78,8 @@ public class AppUserServiceImpl implements AppUserService {
             appUserDAO.save(appUser);
 
             String cryptoUserId = cryptoToolUserId.hashOf(appUser.getId());
-            var response = sendRequestToMailService(cryptoUserId, email);
-            if (response.getStatusCode() != HttpStatus.OK) {
-                String out = String.format("Не удалось отправить письмо на ящик %s!", email);
-                log.error(out);
-                appUser.setEmail(null);
-                appUserDAO.save(appUser);
 
-                return out;
-            }
+            sendRegisterMail(cryptoUserId, email);
 
             return "На ящик " + email + " было отправлено письмо.\nЗавершите регистрацию переходом по ссылке из письма.";
         } else {
@@ -87,8 +87,17 @@ public class AppUserServiceImpl implements AppUserService {
             appUser.setState(BASIC_STATE);
             appUserDAO.save(appUser);
 
-            return "Данный email уже был использован для регистрации!";
+            return "Данный email уже был использован для регистрации!\nВведите другой email или отмените операцию " + CANCEL;
         }
+    }
+
+    private void sendRegisterMail(String cryptoUserId, String email) {
+
+        var mailParams = MailParams.builder()
+                .id(cryptoUserId)
+                .recipientEmail(email)
+                .build();
+        rabbitTemplate.convertAndSend(registrationMailQueue, mailParams);
     }
 
     private ResponseEntity<String> sendRequestToMailService(String cryptoUserId, String email) {

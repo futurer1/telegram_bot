@@ -88,7 +88,6 @@ public class FileServiceImpl implements FileService {
         // кол-во фото в соообщении
         int photoSizeCount = telegramMessage.getPhoto().size();
 
-        //todo если к сообщению прикрепили несколько фото, то берем только одно последнее
         // последнее фото не сжатое и имеет самое большое разрешение
         int photoIndex = photoSizeCount > 1 ? telegramMessage.getPhoto().size() - 1 : 0;
         var telegramPhoto = telegramMessage.getPhoto().get(photoIndex);

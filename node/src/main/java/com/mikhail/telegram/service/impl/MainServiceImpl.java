@@ -1,7 +1,6 @@
 package com.mikhail.telegram.service.impl;
 
 import com.mikhail.telegram.dao.AppUserDAO;
-import com.mikhail.telegram.dao.AppPhotoDAO;
 import com.mikhail.telegram.dao.RawDataDAO;
 import com.mikhail.telegram.entity.AppDocument;
 import com.mikhail.telegram.entity.AppPhoto;
@@ -14,6 +13,7 @@ import com.mikhail.telegram.service.MainService;
 import com.mikhail.telegram.service.ProducerService;
 import com.mikhail.telegram.service.enums.LinkType;
 import com.mikhail.telegram.service.enums.ServiceCommands;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import com.mikhail.telegram.service.FileService;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,7 @@ import static com.mikhail.telegram.entity.UserState.WAIT_FOR_EMAIL_STATE;
 import static com.mikhail.telegram.service.enums.ServiceCommands.*;
 
 @Log4j
+@RequiredArgsConstructor
 @Service
 public class MainServiceImpl implements MainService {
 
@@ -40,19 +41,6 @@ public class MainServiceImpl implements MainService {
     private final FileService fileService;
 
     private final AppUserService appUserService;
-
-    public MainServiceImpl(
-            AppUserDAO appUserDAO,
-            RawDataDAO rawDataDAO,
-            ProducerService producerService,
-            FileService fileService,
-            AppUserService appUserService) {
-        this.appUserDAO = appUserDAO;
-        this.rawDataDAO = rawDataDAO;
-        this.producerService = producerService;
-        this.fileService = fileService;
-        this.appUserService = appUserService;
-    }
 
     @Override
     public void processTextMessage(Update update) {
