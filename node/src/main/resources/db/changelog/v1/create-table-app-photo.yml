@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1-4
+      author: Mikhail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: app_photo
+      changes:
+        - createTable:
+            tableName: app_photo
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_app_photo
+                  autoIncrement: true
+              - column:
+                  name: telegram_file_id
+                  type: VARCHAR(255)
+              - column:
+                  name: binary_content_id
+                  type: BIGINT
+              - column:
+                  name: file_size
+                  type: INT
+        - addForeignKeyConstraint:
+            baseColumnNames: binary_content_id
+            baseTableName: app_photo
+            constraintName: FK_APP_PHOTO_ON_BINARY_CONTENT
+            referencedColumnNames: id
+            referencedTableName: binary_content

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <include file="create-table-app-user.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-binary-content.yml" relativeToChangelogFile="true"/>
+    <include file="create-table-app-photo.yml" relativeToChangelogFile="true"/>
+    <include file="create-table-app-document.yml" relativeToChangelogFile="true"/>
+    <include file="create-table-raw-data.yml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

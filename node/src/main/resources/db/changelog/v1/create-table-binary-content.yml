@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1-3
+      author: Mikhail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: binary_content
+      changes:
+        - createTable:
+            tableName: binary_content
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKeyName: pk_binary_content
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_as_array_of_bytes
+                  type: bytea

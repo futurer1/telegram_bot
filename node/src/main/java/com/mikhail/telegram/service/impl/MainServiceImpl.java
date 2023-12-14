@@ -50,7 +50,7 @@ public class MainServiceImpl implements MainService {
         UserState userState = appUser.getState();
         String textCommand = update.getMessage().getText();
 
-        String output = null;
+        String output;
 
         ServiceCommands serviceCommand = ServiceCommands.fromValue(textCommand);
 

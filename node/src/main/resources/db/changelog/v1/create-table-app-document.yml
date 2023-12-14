@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1-5
+      author: Mikhail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: app_document
+      changes:
+        - createTable:
+            tableName: app_document
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_app_document
+                  autoIncrement: true
+              - column:
+                  name: telegram_file_id
+                  type: VARCHAR(255)
+              - column:
+                  name: doc_name
+                  type: VARCHAR(255)
+              - column:
+                  name: binary_content_id
+                  type: BIGINT
+              - column:
+                  name: mime_type
+                  type: VARCHAR(255)
+              - column:
+                  name: file_size
+                  type: INT
+        - addForeignKeyConstraint:
+            baseColumnNames: binary_content_id
+            baseTableName: app_document
+            constraintName: FK_APP_DOCUMENT_ON_BINARY_CONTENT
+            referencedColumnNames: id
+            referencedTableName: binary_content

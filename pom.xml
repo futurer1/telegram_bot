@@ -54,4 +54,40 @@
     </dependency>
 
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+<!--        Для того, чтобы собирать толстый jar bot1_simple-0.0.1-SNAPSHOT.jar
+            нужно раскомментировать -->
+<!--        <executable>true</executable>-->
+          <image>
+            <builder>paketobuildpacks/builder-jammy-base:latest</builder>
+          </image>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>4.23.0</version>
+
+        <configuration>
+          <propertyFile>liquibase.properties</propertyFile>
+        </configuration>
+
+        <dependencies>
+          <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+    </plugins>
+  </build>
 </project>
