@@ -40,6 +40,9 @@ public class WebHookControllerTest {
     @Value("${spring.rabbitmq.queues.text-message-update}")
     private String queueTextMessageUpdate;
 
+    @Value("${spring.rabbitmq.queues.doc-message-update}")
+    private String queueDocMessageUpdate;
+
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -64,6 +67,21 @@ public class WebHookControllerTest {
 
         Mockito.verify(updateProducer, Mockito.times(1))
                 .produce(eq(queueTextMessageUpdate),
+                        any(Update.class));
+    }
+
+    @Test
+    void onUpdateReceivedMessageWithDocument() throws URISyntaxException {
+        HttpEntity<String> request = new HttpEntity<>(MESSAGE_WITH_DOCUMENT, getHeaders());
+        ResponseEntity<String> result = this.restTemplate.postForEntity(
+                getUri() + "callback/update",
+                request,
+                String.class
+        );
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+
+        Mockito.verify(updateProducer, Mockito.times(1))
+                .produce(eq(queueDocMessageUpdate),
                         any(Update.class));
     }
 }
