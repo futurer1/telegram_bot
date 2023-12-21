@@ -1,28 +1,27 @@
 package com.mikhail.telegram.controller;
 
+import com.mikhail.telegram.config.RabbitConfiguration;
 import com.mikhail.telegram.service.UpdateProducer;
 import com.mikhail.telegram.utils.MessageUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.mikhail.telegram.model.RabbitQueue.*;
-
-@Component
 @Log4j
-public class UpdateController {
+@RequiredArgsConstructor
+@Component
+public class UpdateProcessor {
 
     private TelegramBot bot;
+
     private final MessageUtils messageUtils;
 
     private final UpdateProducer updateProducer;
 
-    public UpdateController(MessageUtils messageUtils, UpdateProducer updateProducer) {
-        this.messageUtils = messageUtils;
-        this.updateProducer = updateProducer;
-    }
+    private final RabbitConfiguration rabbitConfiguration;
 
     public void registerBot(TelegramBot bot) {
         this.bot = bot;
@@ -63,16 +62,16 @@ public class UpdateController {
     }
 
     private void processTextMessage(Update update) {
-        updateProducer.produce(TEXT_MESSAGE_UPDATE, update);
+        updateProducer.produce(rabbitConfiguration.getQueueTextMessageUpdate(), update);
     }
 
     private void processPhotoMessage(Update update) {
-        updateProducer.produce(PHOTO_MESSAGE_UPDATE, update);
+        updateProducer.produce(rabbitConfiguration.getQueuePhotoMessageUpdate(), update);
         setFileIsReceivedView(update);
     }
 
     private void processDocMessage(Update update) {
-        updateProducer.produce(DOC_MESSAGE_UPDATE, update);
+        updateProducer.produce(rabbitConfiguration.getQueueDocMessageUpdate(), update);
         setFileIsReceivedView(update);
     }
 

@@ -5,20 +5,19 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.type.SqlTypes;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import jakarta.persistence.Convert;
 import org.hibernate.annotations.JdbcTypeCode;
 
 @Setter
 @Getter
-@EqualsAndHashCode(exclude = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Entity
-@Table(name = "raw_data")
+@EqualsAndHashCode(exclude = "id")
 @Convert(attributeName = "jsonb", converter = JsonBinaryType.class)
+@Builder
+@Table(name = "raw_data")
+@Entity
 public class RawData {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

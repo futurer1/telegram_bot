@@ -1,0 +1,3 @@
+id,telegram_user_id,first_login_date,first_name,last_name,user_name,email,is_active,state
+2,1234567,2023-12-14 20:54:20.338933,LoginTelegram,NULL,vasya_pupkin,NULL,false,BASIC_STATE
+3,1234568,2023-12-14 20:54:20.338933,LoginTelegram,NULL,vasya_pupkin,NULL,false,BASIC_STATE

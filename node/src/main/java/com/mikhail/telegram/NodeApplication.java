@@ -5,10 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
-@SpringBootApplication
+@Log4j
 @PropertySource("classpath:application.properties")
 @PropertySource("classpath:bot.properties")
-@Log4j
+@SpringBootApplication
 public class NodeApplication {
     public static void main(String[] args) {
         SpringApplication.run(NodeApplication.class, args);

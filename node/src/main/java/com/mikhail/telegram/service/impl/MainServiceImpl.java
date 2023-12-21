@@ -1,7 +1,6 @@
 package com.mikhail.telegram.service.impl;
 
 import com.mikhail.telegram.dao.AppUserDAO;
-import com.mikhail.telegram.dao.AppPhotoDAO;
 import com.mikhail.telegram.dao.RawDataDAO;
 import com.mikhail.telegram.entity.AppDocument;
 import com.mikhail.telegram.entity.AppPhoto;
@@ -14,6 +13,7 @@ import com.mikhail.telegram.service.MainService;
 import com.mikhail.telegram.service.ProducerService;
 import com.mikhail.telegram.service.enums.LinkType;
 import com.mikhail.telegram.service.enums.ServiceCommands;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import com.mikhail.telegram.service.FileService;
 import org.springframework.stereotype.Service;
@@ -27,13 +27,12 @@ import static com.mikhail.telegram.entity.UserState.BASIC_STATE;
 import static com.mikhail.telegram.entity.UserState.WAIT_FOR_EMAIL_STATE;
 import static com.mikhail.telegram.service.enums.ServiceCommands.*;
 
-@Service
 @Log4j
+@RequiredArgsConstructor
+@Service
 public class MainServiceImpl implements MainService {
 
     private final AppUserDAO appUserDAO;
-
-    private final AppPhotoDAO appPhotoDAO;
 
     private final RawDataDAO rawDataDAO;
 
@@ -43,21 +42,6 @@ public class MainServiceImpl implements MainService {
 
     private final AppUserService appUserService;
 
-    public MainServiceImpl(
-            AppUserDAO appUserDAO,
-            AppPhotoDAO appPhotoDAO,
-            RawDataDAO rawDataDAO,
-            ProducerService producerService,
-            FileService fileService,
-            AppUserService appUserService) {
-        this.appUserDAO = appUserDAO;
-        this.appPhotoDAO = appPhotoDAO;
-        this.rawDataDAO = rawDataDAO;
-        this.producerService = producerService;
-        this.fileService = fileService;
-        this.appUserService = appUserService;
-    }
-
     @Override
     public void processTextMessage(Update update) {
         saveRawData(update);
@@ -66,7 +50,7 @@ public class MainServiceImpl implements MainService {
         UserState userState = appUser.getState();
         String textCommand = update.getMessage().getText();
 
-        String output = null;
+        String output;
 
         ServiceCommands serviceCommand = ServiceCommands.fromValue(textCommand);
 

@@ -2,47 +2,58 @@ package com.mikhail.telegram.controller;
 
 import com.mikhail.telegram.config.BotConfig;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-@Component
 @Log4j
-public class TelegramBot extends TelegramLongPollingBot {
+@Component
+public class TelegramBot extends TelegramWebhookBot {
     private final BotConfig config;
 
-    private UpdateController updateController;
+    private final static String UPDATE_PATH = "/update";
+
+    private final UpdateProcessor updateProcessor;
 
     public TelegramBot(BotConfig config,
-                       UpdateController updateController
+                       UpdateProcessor updateProcessor
     ) {
         super(config.getBotToken());
 
         this.config = config;
-        this.updateController = updateController;
+        this.updateProcessor = updateProcessor;
     }
 
     @PostConstruct
     public void init() {
-        updateController.registerBot(this);
-    }
+        updateProcessor.registerBot(this);
 
-    @Override
-    public void onUpdateReceived(Update update) {
+        try {
+            SetWebhook setWebhook = SetWebhook.builder()
+                    .url(config.getBotUri())
+                    .build();
+            this.setWebhook(setWebhook);
 
-        updateController.processUpdate(update);
+            log.debug("Dispatcher is start");
+        } catch (TelegramApiException e) {
+            log.error(e);
+        }
     }
 
     public void sendAnswerMessage(SendMessage message) {
-        if (message != null) {
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                log.error(e.getMessage());
+        if (!config.getBotMuteAnswer()) {
+            if (message != null) {
+                try {
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    log.error(e.getMessage());
+                }
             }
         }
     }
@@ -50,5 +61,15 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         return config.getBotName();
+    }
+
+    @Override
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        return null;
+    }
+
+    @Override
+    public String getBotPath() {
+        return UPDATE_PATH;
     }
 }
