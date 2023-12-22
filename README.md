@@ -47,3 +47,9 @@ TG_BOT_MAIL_HOST
 TG_BOT_MAIL_NAME
 TG_BOT_MAIL_PASSWORD
 ```
+
+Для генерации хеша пароля можно использовать скрипт generate-rabbitmq-hash-pass.sh
+```
+$ sh generate-rabbitmq-hash-pass.sh mypassword
++Kwx/xr/rwlzrNSL5hLxCqS/zNQUGGmmIbOUkxTxAGCg5sWZ
+```
