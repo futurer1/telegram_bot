@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+#  app:
+#    build:
+#      context: .
+#    container_name: bot
+#    networks:
+#      - app-network
+#    depends_on:
+#      - db
+#      - rabbitmq
+#    env_file:
+#      - .env
+#    ports:
+#      - '8080:8080'
+
+  db:
+    image: postgres:15.1-alpine
+    container_name: postgres
+    restart: always
+    networks:
+      - app-network
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=tgbotmiddle
+    ports:
+      - 5433:5432
+    volumes:
+      - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3.10.6-management-alpine
+    hostname: my-rabbitmq
+    restart: always
+    container_name: rabbitmq
+    networks:
+      - app-network
+    environment:
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 536870912
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+#      - cache:/data
+      - './rabbitmq:/var/lib/rabbitmq/mnesia'
+      - './rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro'
+      - './rabbitmq-definitions.json:/etc/rabbitmq/definitions.json:ro'
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  cache:
+    driver: local
+  db-data:
+    driver: local
