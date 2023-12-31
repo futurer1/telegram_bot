@@ -1,12 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.1.5</version>
-    <relativePath/> <!-- lookup parent from repository -->
-  </parent>
 
   <groupId>com.mikhail.telegram</groupId>
   <artifactId>bot1_simple</artifactId>
@@ -15,6 +10,7 @@
 
   <name>bot1_simple</name>
   <url>http://maven.apache.org</url>
+
   <modules>
       <module>dispatcher</module>
       <module>node</module>
@@ -31,13 +27,37 @@
     <java.version>17</java.version>
     <log4j.version>1.2.17</log4j.version>
     <telegram.version>6.7.0</telegram.version>
+    <lombok.version>1.18.24</lombok.version>
+    <junit.version>3.8.1</junit.version>
+
+    <spring.boot.maven.plugin.version>3.1.5</spring.boot.maven.plugin.version>
+    <spring.boot.dependencies.version>3.1.5</spring.boot.dependencies.version>
   </properties>
+
+<!--  <parent>-->
+<!--    <groupId>org.springframework.boot</groupId>-->
+<!--    <artifactId>spring-boot-starter-parent</artifactId>-->
+<!--    <version>3.1.5</version>-->
+<!--    <relativePath/>-->
+<!--  </parent>-->
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring.boot.dependencies.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -50,9 +70,8 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.24</version>
+      <version>${lombok.version}</version>
     </dependency>
-
   </dependencies>
 
   <build>
@@ -60,14 +79,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-<!--        Для того, чтобы собирать толстый jar bot1_simple-0.0.1-SNAPSHOT.jar
-            нужно раскомментировать -->
-<!--        <executable>true</executable>-->
-          <image>
-            <builder>paketobuildpacks/builder-jammy-base:latest</builder>
-          </image>
-        </configuration>
+        <version>${spring.boot.maven.plugin.version}</version>
       </plugin>
 
       <plugin>

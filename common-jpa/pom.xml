@@ -18,6 +18,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
+        <hibernate-types.version>2.2.2</hibernate-types.version>
     </properties>
 
     <dependencies>
@@ -30,9 +31,27 @@
         <dependency>
             <groupId>com.vladmihalcea</groupId>
             <artifactId>hibernate-types-52</artifactId>
-            <version>2.21.1</version>
+            <version>${hibernate-types.version}</version>
             <scope>compile</scope>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <executable>false</executable>
+                        <mainClass>com.mikhail.telegram.NodeApplication</mainClass>
+                        <image>
+                            <builder>paketobuildpacks/builder-jammy-base:latest</builder>
+                        </image>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

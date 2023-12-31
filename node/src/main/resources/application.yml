@@ -1,0 +1,40 @@
+server:
+  port: 8085
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ${RMQ_USER}
+    password: ${RMQ_PASSWORD}
+    queues:
+      text-message-update: text_message_update
+      doc-message-update: doc_message_update
+      photo-message-update: photo_message_update
+      answer-message: answer_message
+      mail-register: mail_register
+  datasource:
+    url: jdbc:postgresql://localhost:5433/tgbotmiddle
+    username: ${PG_USER}
+    password: ${PG_PASSWORD}
+  jpa:
+    generate-ddl: true
+
+service:
+  mail:
+    uri: http://127.0.0.1:8087/mail/send
+  file_info:
+    uri: https://api.telegram.org/bot{token}/getFile?file_id={fileId}
+  file_storage:
+    uri: https://api.telegram.org/file/bot{token}/{filePath}
+
+link:
+  address: 127.0.0.1:8086
+
+salt:
+  photo: ${TG_BOT_SALT_PHOTO}
+  doc: ${TG_BOT_SALT_DOC}
+  userid: ${TG_BOT_SALT_USERID}
+
+bot:
+  token: ${TG_BOT_TOKEN}

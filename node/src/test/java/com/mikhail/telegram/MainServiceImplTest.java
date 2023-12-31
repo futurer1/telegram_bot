@@ -2,6 +2,7 @@ package com.mikhail.telegram;
 
 import com.mikhail.telegram.dao.RawDataDAO;
 import com.mikhail.telegram.entity.RawData;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.util.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

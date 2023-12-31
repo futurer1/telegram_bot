@@ -9,14 +9,22 @@
 
     <artifactId>node</artifactId>
     <packaging>jar</packaging>
-
     <name>node</name>
-    <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <common-utils.version>1.0-SNAPSHOT</common-utils.version>
+        <common-jpa.version>1.0-SNAPSHOT</common-jpa.version>
+
         <hibernate-types.version>2.2.2</hibernate-types.version>
+        <postgresql.version>42.7.0</postgresql.version>
         <javax-mail.version>1.4</javax-mail.version>
+        <liquibase.version>4.25.0</liquibase.version>
+        <junit.version>3.8.1</junit.version>
+        <json.version>20230227</json.version>
     </properties>
 
     <dependencies>
@@ -29,19 +37,29 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.mikhail.telegram</groupId>
             <artifactId>common-jpa</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${common-jpa.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.mikhail.telegram</groupId>
             <artifactId>common-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${common-utils.version}</version>
         </dependency>
 
         <dependency>
@@ -51,14 +69,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.0</version>
+            <version>${postgresql.version}</version>
         </dependency>
 
         <dependency>
@@ -76,13 +89,13 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20230227</version>
+            <version>${json.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>4.25.0</version>
+            <version>${liquibase.version}</version>
         </dependency>
 
         <dependency>
@@ -92,10 +105,24 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
     </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <executable>true</executable>
+                        <mainClass>com.mikhail.telegram.NodeApplication</mainClass>
+                        <image>
+                            <builder>paketobuildpacks/builder-jammy-base:latest</builder>
+                        </image>
+
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

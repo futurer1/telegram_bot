@@ -1,19 +1,23 @@
 version: '3'
 
 services:
-#  app:
+
+#  service-node:
+#    image: com.mikhail.telegram/node-service:latest
+#    container_name: node-service
 #    build:
-#      context: .
-#    container_name: bot
+#      context: ./node
 #    networks:
 #      - app-network
 #    depends_on:
 #      - db
 #      - rabbitmq
-#    env_file:
-#      - .env
+##    env_file:
+##      - .env
+#    expose:
+#      - '8085'
 #    ports:
-#      - '8080:8080'
+#      - '8085:8080'
 
   db:
     image: postgres:15.1-alpine
