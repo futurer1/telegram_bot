@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
 @Log4j
-@PropertySource("classpath:application.yml")
 @SpringBootApplication
 public class DispatcherApplication {
 

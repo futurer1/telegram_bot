@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Log4j
 @Service
 public class FileServiceImpl implements FileService {
-
     private final AppPhotoDAO appPhotoDAO;
 
     private final AppDocumentDAO appDocumentDAO;
@@ -23,12 +22,12 @@ public class FileServiceImpl implements FileService {
     private final CryptoTool cryptoToolDoc;
 
     public FileServiceImpl(AppPhotoDAO appPhoto,
-                           AppDocumentDAO appDocumentDAO,
+                           AppDocumentDAO appDocument,
                            @Qualifier("CryptoToolPhoto") CryptoTool cryptoToolPhoto,
                            @Qualifier("CryptoToolDoc") CryptoTool cryptoToolDoc
     ) {
         this.appPhotoDAO = appPhoto;
-        this.appDocumentDAO = appDocumentDAO;
+        this.appDocumentDAO = appDocument;
         this.cryptoToolPhoto = cryptoToolPhoto;
         this.cryptoToolDoc = cryptoToolDoc;
     }

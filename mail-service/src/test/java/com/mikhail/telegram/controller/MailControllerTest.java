@@ -1,6 +1,5 @@
-package com.mikhail.telegram;
+package com.mikhail.telegram.controller;
 
-import com.mikhail.telegram.controller.MailController;
 import com.mikhail.telegram.dto.MailParams;
 import com.mikhail.telegram.service.impl.MailSenderImpl;
 import org.junit.jupiter.api.Test;

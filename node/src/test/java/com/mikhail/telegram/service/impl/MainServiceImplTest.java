@@ -1,12 +1,11 @@
-package com.mikhail.telegram;
+package com.mikhail.telegram.service.impl;
 
 import com.mikhail.telegram.dao.RawDataDAO;
 import com.mikhail.telegram.entity.RawData;
-import org.junit.jupiter.api.Assertions;
-import org.springframework.util.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -20,7 +19,7 @@ public class MainServiceImplTest {
     private RawDataDAO rawDataDAO;
 
     @Test
-    public void testSaveRawDAO() {
+    public void testSaveRawDAOIntegration() {
         Update update = new Update();
         Message message = new Message();
         message.setText("test");

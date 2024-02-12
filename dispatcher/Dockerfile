@@ -1,5 +1,5 @@
 FROM khipu/openjdk17-alpine
-ARG APP_NAME="node"
+ARG APP_NAME="dispatcher"
 ARG APP_VERSION="0.0.1"
 ARG JAR_FILE="/build/libs/${APP_NAME}-${APP_VERSION}.jar"
 

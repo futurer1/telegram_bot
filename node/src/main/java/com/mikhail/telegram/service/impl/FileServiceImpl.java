@@ -1,28 +1,24 @@
 package com.mikhail.telegram.service.impl;
 
+import com.mikhail.telegram.dao.AppDocumentDAO;
 import com.mikhail.telegram.dao.AppPhotoDAO;
+import com.mikhail.telegram.dao.BinaryContentDAO;
+import com.mikhail.telegram.entity.AppDocument;
 import com.mikhail.telegram.entity.AppPhoto;
+import com.mikhail.telegram.entity.BinaryContent;
+import com.mikhail.telegram.exceptions.UploadFileException;
+import com.mikhail.telegram.service.FileService;
 import com.mikhail.telegram.service.enums.LinkType;
 import com.mikhail.telegram.utils.CryptoTool;
 import lombok.extern.log4j.Log4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import com.mikhail.telegram.dao.AppDocumentDAO;
-import com.mikhail.telegram.dao.BinaryContentDAO;
-import com.mikhail.telegram.entity.AppDocument;
-import com.mikhail.telegram.entity.BinaryContent;
-import com.mikhail.telegram.exceptions.UploadFileException;
-import com.mikhail.telegram.service.FileService;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 
 import java.io.IOException;

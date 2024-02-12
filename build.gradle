@@ -1,0 +1,38 @@
+allprojects {
+    apply plugin: 'java'
+    apply from: "$rootProject.projectDir/dependencies.gradle"
+
+    group = 'com.mikhail.telegram'
+    version = '0.0.1'
+    java.sourceCompatibility = JavaVersion.VERSION_17
+    java.targetCompatibility = JavaVersion.VERSION_17
+
+    configurations {
+
+
+        compileOnly.extendsFrom annotationProcessor
+        //testCompileOnly.extendsFrom annotationProcessor
+        //testAnnotationProcessor.extendsFrom annotationProcessor
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation platform(libsTest.junitBom)
+        testImplementation(libsTest.jupiter)
+
+        compileOnly mylibs.lombok
+        annotationProcessor mylibs.lombok
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+//subprojects {
+//    apply plugin: 'java'
+//    apply plugin: 'org.springframework.boot'
+//}
