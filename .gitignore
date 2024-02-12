@@ -18,6 +18,8 @@ rabbitmq.env
 .idea/gradle.xml
 .idea/jpa-buddy.xml
 .idea/misc.xml
+.idea/vcs.xml
+.idea/.name
 
 *.iws
 *.iml
