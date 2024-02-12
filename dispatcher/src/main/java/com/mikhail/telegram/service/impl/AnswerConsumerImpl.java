@@ -1,8 +1,8 @@
 package com.mikhail.telegram.service.impl;
 
 import com.mikhail.telegram.controller.UpdateProcessor;
-import lombok.RequiredArgsConstructor;
 import com.mikhail.telegram.service.AnswerConsumer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

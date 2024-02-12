@@ -7,7 +7,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-
 @Log4j
 @RequiredArgsConstructor
 @Service
@@ -19,11 +18,9 @@ public class UpdateProducerImpl implements UpdateProducer {
     public void produce(String rabbitQueue, Update update) {
         log.debug(update.getMessage().getText());
 
-        // преобразование в JSON объекта Update и отправка в указанную очередь rabbitQueue
-
-        // Отправляет полученное от API Telegram сообщение в брокера
-        // Сообщения пользователей накапливаются в различных очередях в зависимости от
-        // типа сообщения
+        // convert Update-object to JSON and send to a queue
+        // Send revieved from API Telegram message to RabbitMQ
+        // Messages is accumulate in various queues by type message
         rabbitTemplate.convertAndSend(rabbitQueue, update);
     }
 }

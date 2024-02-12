@@ -1,11 +1,11 @@
 package com.mikhail.telegram.entity;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import jakarta.persistence.*;
-import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.hibernate.annotations.JdbcTypeCode;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Setter
 @Getter

@@ -1,0 +1,7 @@
+jar.enabled = true
+
+dependencies {
+    implementation mylibs.springBootStarterDataJpa
+    implementation mylibs.vladmihalcea
+    implementation mylibs.postgre
+}

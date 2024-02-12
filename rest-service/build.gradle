@@ -1,0 +1,20 @@
+plugins {
+    id 'application'
+    id 'org.springframework.boot' version "${springBootVersion}"
+}
+
+application {
+    mainClass = 'com.mikhail.telegram.RestService'
+}
+
+dependencies {
+    implementation project(':common-utils')
+    implementation project(':common-jpa')
+
+    implementation mylibs.springBootStarterWeb
+    implementation mylibs.springBootStarterDataJpa
+    implementation mylibs.vladmihalcea
+    implementation mylibs.postgre
+    implementation mylibs.commonIo
+    implementation mylibs.log4j
+}

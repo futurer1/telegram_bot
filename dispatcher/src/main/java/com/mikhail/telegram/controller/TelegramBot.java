@@ -2,7 +2,6 @@ package com.mikhail.telegram.controller;
 
 import com.mikhail.telegram.config.BotConfig;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;

@@ -1,0 +1,29 @@
+plugins {
+    id 'application'
+    id 'org.springframework.boot' version "${springBootVersion}"
+}
+
+application {
+    mainClass = 'com.mikhail.telegram.NodeApplication'
+}
+
+dependencies {
+    implementation project(':common-utils')
+    implementation project(':common-jpa')
+
+    implementation mylibs.springBootStarterWeb
+    implementation mylibs.springBootStarterAmqp
+    implementation mylibs.springBootStarterDataJpa
+
+    implementation mylibs.telegramBot
+    implementation mylibs.vladmihalcea
+    implementation mylibs.postgre
+    implementation mylibs.javaxMail
+    implementation mylibs.json
+    implementation mylibs.liquibase
+
+    implementation mylibs.log4j
+    testImplementation libsTest.springBootStarterTest
+}
+
+test.onlyIf { project.hasProperty('runNodeTests')}

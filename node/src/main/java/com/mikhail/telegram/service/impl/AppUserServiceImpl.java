@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-
 import java.util.Optional;
 
 import static com.mikhail.telegram.entity.UserState.BASIC_STATE;

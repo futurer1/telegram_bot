@@ -1,0 +1,9 @@
+rootProject.name = 'bot3_simple'
+
+include 'rest-service'
+include 'common-utils'
+include 'common-jpa'
+include 'dispatcher'
+include 'mail-service'
+include 'node'
+

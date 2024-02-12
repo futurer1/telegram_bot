@@ -1,8 +1,8 @@
-package com.mikhail.telegram;
+package com.mikhail.telegram.service.impl;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -19,21 +19,21 @@ public class NodeConfigurationTest {
     private String saltUserId;
 
     @Test
-    void testSaltPhoto() {
+    void testSaltPhotoIntegration() {
         if ("".equals(saltPhoto)) {
             fail("saltPhoto can't be empty!");
         }
     }
 
     @Test
-    void testSaltDoc() {
+    void testSaltDocIntegration() {
         if ("".equals(saltDoc)) {
             fail("saltDoc can't be empty!");
         }
     }
 
     @Test
-    void testSaltUserId() {
+    void testSaltUserIdIntegration() {
         if ("".equals(saltUserId)) {
             fail("saltUserId can't be empty!");
         }
