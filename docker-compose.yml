@@ -16,8 +16,6 @@ services:
       - .env
       - rabbitmq.env
       - postgre.env
-#    environment:
-#      - TG_BOT_URI=https://9c40-188-243-183-52.ngrok-free.app
     depends_on:
       - db
       - rabbitmq
@@ -40,8 +38,6 @@ services:
     env_file:
       - .env
       - rabbitmq.env
-#    environment:
-#      - TG_BOT_URI=https://9c40-188-243-183-52.ngrok-free.app
     depends_on:
       - db
       - rabbitmq
@@ -129,7 +125,6 @@ services:
       - '15672:15672'
       - '5673:5672'
     volumes:
-#      - cache:/data
       - './rabbitmq:/var/lib/rabbitmq/mnesia'
       - './rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro'
       - './rabbitmq-definitions.json:/etc/rabbitmq/definitions.json:ro'
