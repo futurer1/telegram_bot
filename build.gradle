@@ -8,11 +8,7 @@ allprojects {
     java.targetCompatibility = JavaVersion.VERSION_17
 
     configurations {
-
-
         compileOnly.extendsFrom annotationProcessor
-        //testCompileOnly.extendsFrom annotationProcessor
-        //testAnnotationProcessor.extendsFrom annotationProcessor
     }
 
     repositories {
@@ -31,8 +27,3 @@ allprojects {
         useJUnitPlatform()
     }
 }
-
-//subprojects {
-//    apply plugin: 'java'
-//    apply plugin: 'org.springframework.boot'
-//}
